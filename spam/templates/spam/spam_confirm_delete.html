@@ -1,0 +1,24 @@
+{% extends 'spam/base.html' %}
+{% block content %}
+<div class="col-lg-6">
+    <div class="card mb-4 box-shadow text-center">
+        <div class="card-header">
+            <span>Вы действительно хотите удалить рассылку "{{ object.title }}"?</span>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form-floating">
+                {% csrf_token %}
+                <div class="d-flex justify-content-evenly">
+                    <button type="submit" class="btn btn-lg btn-block btn-danger">
+                        Подтвердить удаление
+                    </button>
+                    <br>
+                    <a href="{% url 'spam:spam_detail' object.pk %}" class="btn btn-lg btn-block btn-warning">
+                        Вернуться назад
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

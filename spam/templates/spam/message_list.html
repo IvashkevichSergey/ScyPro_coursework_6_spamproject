@@ -1,0 +1,28 @@
+{% extends 'spam/base.html' %}
+
+{% block content %}
+<a href="{% url 'spam:create_message' %}" class="btn btn-outline-secondary mb-3">
+    Добавить новое сообщение
+</a>
+<div class="row text-center">
+    {% for item in object_list %}
+    <div class="col-3">
+        <div class="card mb-4 box-shadow" style="height: 95%;">
+            <div class="card-header">
+                <h4 class="font-weight-normal">{{ item.subject }}</h4>
+            </div>
+            <div class="card-body d-flex align-content-between flex-wrap">
+                <h6 class="list-unstyled mt-3 mb-4 m-3">
+                    {{ item.body|slice:100 }}
+                </h6>
+                <a type="button" href="{% url 'spam:message_detail' item.pk %}"
+                   class="btn btn-lg btn-block btn-outline-primary float-none flex-fill p-1 align-self-end">
+                    Перейти к сообщению
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

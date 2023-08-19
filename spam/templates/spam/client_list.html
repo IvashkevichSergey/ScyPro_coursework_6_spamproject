@@ -1,0 +1,31 @@
+{% extends 'spam/base.html' %}
+
+{% block content %}
+<a href="{% url 'spam:create_client' %}" class="btn btn-outline-secondary mb-3">
+    Добавить нового клиента сервиса
+</a>
+<div class="row">
+    <div class="col-8">
+        <table class="table">
+        <div class="form-control border-success border-opacity-25 text-center fs-5">Список клиентов</div>
+            <tr>
+                <th>ФИО</th>
+                <th>Эл. почта</th>
+                <th></th>
+            </tr>
+            {% for client in object_list %}
+            <tr class="align-middle">
+                <td>{{ client.full_name }}</td>
+                <td>{{ client.email }}</td>
+                <td>
+                    <a type="button" href="{% url 'spam:client_detail' client.pk %}"
+                       class="btn btn-outline-dark">
+                        Перейти к клиенту
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

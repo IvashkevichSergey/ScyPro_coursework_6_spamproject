@@ -78,8 +78,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spam',
-        'USERNAME': 'postgres'
+        'NAME': 'spam_base',
+        'USER': 'postgres',
+        'PASSWORD': '123'
     }
 }
 
@@ -121,10 +122,16 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = (
-        BASE_DIR / '/static',
+        BASE_DIR / 'static',
 )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'prado-150@yandex.ru'
+EMAIL_HOST_PASSWORD = 'SEREGa1993'
+EMAIL_USE_SSL = True
