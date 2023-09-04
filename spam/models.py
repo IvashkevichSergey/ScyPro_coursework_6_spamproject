@@ -40,7 +40,7 @@ class Spam(models.Model):
     periodicity = models.SmallIntegerField(default=7, verbose_name='периодичность рассылки (дней)')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='статус')
     clients = models.ManyToManyField(Client, verbose_name='кому отправить')
-    messages = models.ManyToManyField(Message, verbose_name='сообщения к рассылке')
+    message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, verbose_name='сообщение к рассылке')
 
     def __str__(self):
         return f'Рассылка {self.title} {self.status}'

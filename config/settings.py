@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'spam',
+    'users',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -130,8 +132,16 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'prado-150@yandex.ru'
-EMAIL_HOST_PASSWORD = 'SEREGa1993'
+EMAIL_HOST_USER = 'jan.jangovitch@yandex.ru'
+EMAIL_HOST_PASSWORD = 'uwptqmyvwuazpxvs'
 EMAIL_USE_SSL = True

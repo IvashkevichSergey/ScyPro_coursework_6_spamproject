@@ -3,52 +3,53 @@
 <div class="row text-center">
     <div class="col-lg-6 col-md-6 col-sm-12">
         <div class="card mb-1 box-shadow">
-            <div class="card-header">
-                <h4 class="font-weight-normal">{{ object.title }}</h4>
+            <div class="card-header font-weight-normal">
+                <h4>{{ object.title }}</h4>
             </div>
-        </div>
 
-        <div class="card mb-1 box-shadow">
             <div class="card-body">
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{{ object.body }}</h6>
+                <div class="mb-3 font-weight-normal">
+                    <h6>Время рассылки:</h6>
+                    <h6 class="text-muted">{{ object.spam_time }}</h6>
                 </div>
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{{ object.spam_time }}</h6>
+                <hr>
+                <div class="mb-3 font-weight-normal">
+                    <h6>Периодичность (дней):</h6>
+                    <h6 class="text-muted">{{ object.periodicity }}</h6>
                 </div>
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{{ object.periodicity }}</h6>
+                <hr>
+                <div class="mb-3 font-weight-normal">
+                    <h6>Текущий статус:</h6>
+                    <h6 class="text-muted">{{ object.get_status_display|title }}</h6>
+                    <btn class="btn-primary" href="{{ object.status }}">Запустить рассылку</btn>
                 </div>
-
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{{ object.status }}</h6>
-                </div>
-                <br>
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">
-                        {% for client in object.clients.all %}
-                        <p>{{ client }}</p>
-                        {% endfor %}
-                    </h6>
-                </div>
-                <br>
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{% for message in object.messages.all %} {{ message }} {% endfor %}</h6>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div><a href="{% url 'spam:change_spam' object.pk %}"
-                            class="btn btn-outline-secondary mt-3 mb-1">
-                        Изменить рассылку
-                    </a>
+                <hr>
+                <div class="mb-3 font-weight-normal">
+                    <h6>Получатели рассылки:</h6>
+                    {% for client in object.clients.all %}
+                    <h6 class="text-muted">{{ client }}</h6>
+                    {% endfor %}
+                    <hr>
+                    <div class="mb-3 font-weight-normal">
+                        <h6>Сообщение к отправке:</h6>
+                        <h6 class="text-muted">{{ object.message }}</h6>
                     </div>
-                    <div><a href="{% url 'spam:delete_spam' object.pk %}"
-                            class="btn btn-outline-secondary mt-3 mb-1">
-                        Удалить рассылку
-                    </a>
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col"><a href="{% url 'spam:change_spam' object.pk %}"
+                                          class="btn btn-outline-secondary">
+                        Изменить рассылку</a>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col"><a href="{% url 'spam:delete_spam' object.pk %}"
+                                          class="btn btn-outline-danger">
+                        Удалить рассылку</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    {% endblock %}
+            {% endblock %}

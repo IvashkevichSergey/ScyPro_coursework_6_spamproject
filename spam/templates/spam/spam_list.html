@@ -23,10 +23,10 @@
                     <td>{{ item.title }}</td>
                     <td>{{ item.spam_time }}</td>
                     <td>{{ item.periodicity }}</td>
-                    <td>{{ item.status }}</td>
+                    <td>{{ item.get_status_display|title }}</td>
                     <td>
                         <a type="button" href="{% url 'spam:spam_detail' item.pk %}"
-                           class="btn btn-outline-dark"">
+                           class="btn btn-outline-dark">
                             Подробнее
                         </a>
                     </td>

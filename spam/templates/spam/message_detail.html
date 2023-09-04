@@ -6,31 +6,30 @@
             <div class="card-header">
                 <h4 class="font-weight-normal">{{ object.subject }}</h4>
             </div>
-        </div>
 
-        <div class="card mb-1 box-shadow">
+
             <div class="card-body">
-                <div class="mb-3">
-                    <h6 class="font-weight-normal">{{ object.body }}</h6>
+                <div class="mb-3 font-weight-normal">
+                    <h6>Текст сообщения:</h6>
+                    <h6 class="text-muted">{{ object.body }}</h6>
                 </div>
-                <div class="form-control border-success rounded-pill border-opacity-50 mt-3 mb-1">
-                    Запись просмотрели NOT found человек(-а)
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div><a href="{% url 'spam:change_message' object.pk %}"
-                            class="btn btn-outline-secondary mt-3 mb-1">
-                        Изменить запись
-                    </a>
-                    </div>
-                    <div><a href="{% url 'spam:delete_message' object.pk %}"
-                            class="btn btn-outline-secondary mt-3 mb-1">
-                        Удалить запись
-                    </a>
+            </div>
 
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col"><a href="{% url 'spam:change_message' object.pk %}"
+                                        class="btn btn-outline-secondary">
+                        Изменить запись</a>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col"><a href="{% url 'spam:delete_message' object.pk %}"
+                                        class="btn btn-outline-danger">
+                        Удалить запись</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    {% endblock %}
+{% endblock %}

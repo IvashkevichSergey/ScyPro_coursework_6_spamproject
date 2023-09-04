@@ -8,13 +8,14 @@
 </head>
 
 <body>
+
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">Меню</h5>
     <nav class="ms-5">
-        <a class="p-2 btn btn-outline-primary" href="{% url 'spam:index' %}">Главная</a>
-        <a class="p-2 btn btn-outline-primary" href="{% url 'spam:messages' %}">Сообщения</a>
-        <a class="p-2 btn btn-outline-primary" href="{% url 'spam:clients' %}">Клиенты</a>
-        <a class="p-2 btn btn-outline-primary" href="">Просмотр логов рассылок</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:index' %}">Главная</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:messages' %}">Сообщения</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:clients' %}">Клиенты</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="">Просмотр логов рассылок</a>
     </nav>
 </div>
 
@@ -31,8 +32,7 @@
 <footer class="pt-1 my-md-5 pt-md-5 border-top">
     <div class="row">
         <div class="col-12 col-md">
-            Сервис управления спам-рассылками
-            <small class="d-block mb-3 text-muted">&copy; 2023</small>
+            <small class="d-block mb-3 text-muted">&copy; {% now 'Y' %} </small>
         </div>
     </div>
 </footer>

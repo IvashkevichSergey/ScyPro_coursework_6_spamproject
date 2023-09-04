@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from spam.models import Spam, Message, Client
-from utils import send_spam
+
 
 
 class MessageListView(ListView):
@@ -65,13 +65,13 @@ class SpamDetailView(DetailView):
 
 class SpamCreateView(CreateView):
     model = Spam
-    fields = ('title', 'spam_time', 'periodicity', 'status', 'clients', 'messages')
+    fields = ('title', 'spam_time', 'periodicity', 'status', 'clients', 'message')
     success_url = reverse_lazy('spam:index')
 
 
 class SpamUpdateView(UpdateView):
     model = Spam
-    fields = ('title', 'spam_time', 'periodicity', 'status', 'clients', 'messages')
+    fields = ('title', 'spam_time', 'periodicity', 'status', 'clients', 'message')
     success_url = reverse_lazy('spam:index')
 
 
