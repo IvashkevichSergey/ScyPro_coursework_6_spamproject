@@ -43,7 +43,7 @@ class Spam(models.Model):
     message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, verbose_name='сообщение к рассылке')
 
     def __str__(self):
-        return f'Рассылка {self.title} {self.status}'
+        return f'Рассылка {self.title} {self.get_status_display()}'
 
     class Meta:
         verbose_name = 'рассылка'
