@@ -1,111 +1,100 @@
 from django.utils import timezone
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from django_apscheduler.jobstores import DjangoJobStore, register_job
-
-import datetime
 import smtplib
 
 from django.core.mail import send_mail
 
 from config import settings
-from spam.models import Spam, Message, Logs
+from spam.models import Spam, Logs, Client
 
 
 def send_emails():
+    """
+    Функция сравнивает текущие дату/время с датой и временем, на которые запланированы
+    рассылки. С заданной периодичностью запускает функцию отправки сообщений конкретным клиентам
+    """
     # Ищем рассылки со статусом running
-    mailings = Spam.objects.filter(status='running')
+    mailings = Spam.objects.filter(status='started')
     # Проходим по всем рассылкам со статусом running
     for spam_email in mailings:
-        # Проверяем, отправлялась ли данная рассылка ранее
-        suitable_logs = Logs.objects.filter(spam=spam_email)
-        if suitable_logs:
-            print()
-            # Получаем из логов информацию по последней отправленной рассылке
-            # last_spam = suitable_logs.order_by('-last_send').first()
-            # # Получаем дату отправки последней отправленной рассылки
-            # last_send = last_spam.last_send
-            # print(f'Рассылка последний раз отправлялась: {last_send}')
-            #
-            # # Получаем текущую дату
-            # current_time = timezone.now()
-            # print(f'Текущее время: {current_time}')
-            #
-            # print((current_time - last_send).days)
-            #
-            # spam_periodicity = spam_email.periodicity
-            # print(f'Периодичность рассылки: {spam_periodicity} дней')
-            #
-            # # Проверяем сколько дней прошло с момента отправки последней рассылки,
-            # # сравниваем с периодичностью рассылки
-            # if (current_time - last_send).days >= spam_periodicity:
-            #     print('Запускается скрипт рассылки спама')
-        else:
-            print('\nУ рассылки', spam_email, 'ещё нет логов')
-
+        # Проходим по всем клиентам из рассылки
+        for client in spam_email.clients.all():
+            # Получаем текущую дату
             current_time = timezone.now()
-            print(f'Текущее время: {current_time}')
+            # Проверяем, отправлялась ли данная рассылка конкретному клиенту ранее
+            suitable_logs = Logs.objects.filter(spam=spam_email, client=client)
+            if suitable_logs:
+                # Получаем из логов информацию по последней отправленной рассылке
+                last_spam = suitable_logs.order_by('-last_send').first()
+                # Получаем дату отправки последней отправленной рассылки
+                last_send = last_spam.last_send
+                # Получаем периодичность рассылки
+                spam_periodicity = spam_email.periodicity
 
-            # Получаем запланированное время отправки рассылки
-            spam_time = spam_email.spam_time
-            print(f'Время рассылки: {spam_time}')
+                # Проверяем сколько дней прошло с момента отправки последней рассылки,
+                # сравниваем с периодичностью рассылки
+                if (current_time - last_send).days >= spam_periodicity:
+                    print('Запускается скрипт рассылки СПАМа')
+                    send_spam(spam_email, client)
+            else:
+                # Получаем запланированное время отправки рассылки
+                spam_time = spam_email.spam_time
 
-            # Вычисляем оставшееся время до запланированной отправки
-            t1 = timezone.timedelta(hours=current_time.hour, minutes=current_time.minute)
-            t2 = timezone.timedelta(hours=spam_time.hour, minutes=spam_time.minute)
-            time_to_send_spam = (t2 - t1).seconds / 60
-            print(time_to_send_spam)
+                # Вычисляем оставшееся время в минутах до запланированной отправки
+                t1 = timezone.timedelta(hours=current_time.hour, minutes=current_time.minute)
+                t2 = timezone.timedelta(hours=spam_time.hour, minutes=spam_time.minute)
+                time_to_send_spam = (t2 - t1).seconds / 60
+                # print("Оставшееся время до запуска рассылки:", time_to_send_spam, "минут")
 
-            if 0 <= time_to_send_spam < 5:
-                print('Запускается рассылка СПАМа в первый раз')
+                # Запускаем рассылку в 1ый раз с точностью до 5мин до запланированного времени
+                if 0 <= time_to_send_spam < 5:
+                    print('Запускается рассылка СПАМа в первый раз')
+                    send_spam(spam_email, client)
 
 
+def create_logs(email_params: Spam, client: Client, status: str, errors: str):
+    """Функция для записи в базу данных логов отправки писем"""
+    log = Logs.objects.create(
+        spam=email_params,
+        last_send=timezone.now(),
+        status=status,
+        client=f'{client}',
+        errors=errors
+    )
+    log.save()
 
-def send_spam(email_params: Spam):
+
+def send_spam(email_params: Spam, client: Client):
+    """
+    Запускает функцию отправки писем конкретным адресатам,
+    обрабатывает возможные ошибки, вызывает функция записи логов отправки
+    """
     try:
-        clients_emails = [client.email for client in list(email_params.clients.all())]
-        # send_mail(
-        #     subject=email_params.message.subject,
-        #     message=email_params.message.body,
-        #     from_email=settings.EMAIL_HOST_USER,
-        #     recipient_list=clients_emails,
-        #     fail_silently=False
-        # )
-    except smtplib.SMTPException as e:
-        print(e)
+        email = send_mail(
+            subject=email_params.message.subject,
+            message=email_params.message.body,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[client.email],
+            fail_silently=False
+        )
+    except smtplib.SMTPDataError as err:
+        print(err)
+        create_logs(email_params, client, 'failed', 'SMTPDataError')
+    except smtplib.SMTPException as err:
+        print(err)
+        create_logs(email_params, client, 'failed', 'SMTPException')
     else:
-        print('all messages sent')
-
-
-def send_hello():
-    time = datetime.datetime.now()
-    sp = Spam.objects.all()[0]
-    print('Периодичность рассылки -> ', sp.periodicity)
-    print('hello world:[{}]'.format(time))
-    l = Logs.objects.all()[2]
-    print(datetime.datetime.now())
-    # print(datetime.time.hour)
-    # offset = timezone.timezone(timezone.timedelta(hours=3))
-    # cur_time = timezone.datetime.utcoffset(tz=offset)
-    # print(cur_time)
-    # now(tz=offset)
-    # print(cur_time.hour, cur_time.minute)
-    # sp_time = sp.spam_time
-    # print(sp_time.hour, sp_time.minute)
-    # t1 = timezone.timedelta(hours=cur_time.hour, minutes=cur_time.minute)
-    # t2 = timezone.timedelta(hours=sp_time.hour, minutes=sp_time.minute)
-    # print(t1 - t2)
-    # a = (t1 - t2).seconds / 60
-    # print(a)
-    # print(0 <= a <= 5)
-
-    # print(cur_time, ' --- ', l.last_send)
-    # print(timezone.timedelta(cur_time, sp.spam_time))
-    # # print(timezone.now().strptime())
-    # print(datetime.timedelta(cur_time, sp.spam_time))
+        if email:
+            print('message sent')
+            create_logs(email_params, client, 'ок', 'Без ошибок')
+        else:
+            print('something went wrong')
+            create_logs(email_params, client, 'failed', 'Ошибка доставки письма')
 
 
 def task_schedular():
+    """Запускает крон для периодической проверки активных рассылок"""
     scheduler = BackgroundScheduler()
-    scheduler.add_job(send_emails, trigger=CronTrigger(second='*/5'))
-    scheduler.start()
+    # scheduler.add_job(send_emails, trigger=CronTrigger(second='*/5'))
+    # scheduler.start()

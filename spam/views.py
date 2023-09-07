@@ -4,7 +4,6 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView,
 from spam.models import Spam, Message, Client
 
 
-
 class MessageListView(ListView):
     model = Message
 

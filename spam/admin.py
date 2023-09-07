@@ -15,11 +15,11 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Spam)
 class SpamAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'spam_time')
+    list_display = ('id', 'title', 'status', 'spam_time')
 
 
 @admin.register(Logs)
 class LogsAdmin(admin.ModelAdmin):
-    list_display = ('spam', 'last_send', 'status')
+    list_display = ('spam', 'client', 'last_send', 'status')
 
 
