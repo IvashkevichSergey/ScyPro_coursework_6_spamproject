@@ -14,42 +14,56 @@
                 </div>
                 <hr>
                 <div class="mb-3 font-weight-normal">
-                    <h6>Периодичность (дней):</h6>
+                    <h6>Периодичность отправки (дней):</h6>
                     <h6 class="text-muted">{{ object.periodicity }}</h6>
                 </div>
                 <hr>
                 <div class="mb-3 font-weight-normal">
                     <h6>Текущий статус:</h6>
-                    <h6 class="text-muted">{{ object.get_status_display|title }}</h6>
-                    <btn class="btn-primary" href="{{ object.status }}">Запустить рассылку</btn>
+                    <h6 class="text-muted">Рассылка {{ object.get_status_display }}</h6>
+                    {% if object.status == 'created' and object.owner == user %}
+                    <span class="badge text-bg-success">
+                        <a class="link-light link-underline-opacity-0 link-underline-opacity-75-hover"
+                           href="{% url 'spam:toggle_status' object.pk %}">Запустить рассылку</a>
+                    </span>
+                    {% elif object.status == 'started' %}
+                    <span class="badge text-bg-success">
+                        <a class="link-light link-underline-opacity-0 link-underline-opacity-75-hover"
+                           href="{% url 'spam:toggle_status' object.pk %}">Завершить рассылку</a>
+                    </span>
+                    {% endif %}
                 </div>
                 <hr>
                 <div class="mb-3 font-weight-normal">
                     <h6>Получатели рассылки:</h6>
                     {% for client in object.clients.all %}
-                    <h6 class="text-muted">{{ client }}</h6>
+                    <a class="list-group-item h6 text-muted link-underline link-underline-opacity-0"
+                           href="{% url 'spam:client_detail' client.pk %}">{{ client }}</a>
                     {% endfor %}
                     <hr>
                     <div class="mb-3 font-weight-normal">
                         <h6>Сообщение к отправке:</h6>
-                        <h6 class="text-muted">{{ object.message }}</h6>
+                        <a class="h6 text-muted link-underline link-underline-opacity-0"
+                           href="{% url 'spam:message_detail' object.message.pk %}">{{ object.message }}</a>
                     </div>
-
                 </div>
             </div>
-
+            {% if object.owner == user %}
             <div class="card-footer">
                 <div class="row">
                     <div class="col"><a href="{% url 'spam:change_spam' object.pk %}"
-                                          class="btn btn-outline-secondary">
+                                        class="btn btn-outline-secondary">
                         Изменить рассылку</a>
                     </div>
                     <div class="col-4"></div>
                     <div class="col"><a href="{% url 'spam:delete_spam' object.pk %}"
-                                          class="btn btn-outline-danger">
+                                        class="btn btn-outline-danger">
                         Удалить рассылку</a>
                     </div>
                 </div>
             </div>
-
-            {% endblock %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

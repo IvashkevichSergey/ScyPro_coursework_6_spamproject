@@ -6,32 +6,43 @@
 </a>
 <div class="row">
     <div class="col-12">
-        <div class="col-6">
-            <div class="form-control border-success border-opacity-25 text-center fs-5">Общий список рассылок</div>
-            <table class="table">
+        <div class="col-8">
+            {% if not object_list %}
+            <div class="form-control border-success border-opacity-25 text-center fs-5">Рассылки отсутствуют</div>
+            {% else %}
+            <div class="form-control border-success border-opacity-25 text-center fs-5">Список рассылок</div>
+            <table class="table text-center">
                 <tr>
-                    <th>Номер</th>
                     <th>Название рассылки</th>
                     <th>Время</th>
                     <th>Периодичность</th>
                     <th>Статус</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 {% for item in object_list %}
                 <tr class="align-middle">
-                    <td>{{ item.pk }}</td>
                     <td>{{ item.title }}</td>
                     <td>{{ item.spam_time }}</td>
                     <td>{{ item.periodicity }}</td>
                     <td>{{ item.get_status_display|title }}</td>
                     <td>
                         <a type="button" href="{% url 'spam:spam_detail' item.pk %}"
-                           class="btn btn-outline-dark">
+                           class="btn btn-outline-dark btn-sm">
                             Подробнее
                         </a>
                     </td>
+                    {% if perms.spam.view_logs %}
+                    <td>
+                        <a type="button" href="{% url 'spam:logs_list' item.pk %}"
+                           class="btn btn-outline-dark btn-sm">
+                            Просмотр логов
+                        </a>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
+                {% endif %}
             </table>
         </div>
     </div>

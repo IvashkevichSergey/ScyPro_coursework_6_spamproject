@@ -5,9 +5,12 @@
     Добавить нового клиента сервиса
 </a>
 <div class="row">
-    <div class="col-8">
-        <table class="table">
+    <div class="col-6">
+        {% if not object_list %}
+            <div class="form-control border-success border-opacity-25 text-center fs-5">Клиенты отсутствуют</div>
+            {% else %}
         <div class="form-control border-success border-opacity-25 text-center fs-5">Список клиентов</div>
+        <table class="table text-center">
             <tr>
                 <th>ФИО</th>
                 <th>Эл. почта</th>
@@ -19,13 +22,14 @@
                 <td>{{ client.email }}</td>
                 <td>
                     <a type="button" href="{% url 'spam:client_detail' client.pk %}"
-                       class="btn btn-outline-dark">
-                        Перейти к клиенту
+                       class="btn btn-outline-dark btn-sm">
+                        Подробнее
                     </a>
                 </td>
             </tr>
             {% endfor %}
         </table>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

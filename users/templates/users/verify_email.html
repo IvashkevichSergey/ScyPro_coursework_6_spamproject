@@ -1,0 +1,20 @@
+{% extends 'spam/base.html' %}
+{% block content %}
+<div class="col-lg-4">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Подтвердите электронную почту</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form-floating">
+                {% csrf_token %}
+                <input type="text" name="check_code" placeholder="Введите код" required>
+                <button type="submit" class="btn btn-lg btn-block btn-success">Подтвердить</button>
+                {% if error %}
+                <div class="alert alert-danger mt-2">{{ error }}</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

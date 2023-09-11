@@ -15,6 +15,7 @@
                 </div>
             </div>
 
+            {% if object.owner == user %}
             <div class="card-footer">
                 <div class="row">
                     <div class="col"><a href="{% url 'spam:change_message' object.pk %}"
@@ -28,6 +29,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

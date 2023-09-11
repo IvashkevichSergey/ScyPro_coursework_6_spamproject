@@ -5,6 +5,11 @@
     Добавить новое сообщение
 </a>
 <div class="row text-center">
+    {% if not object_list %}
+    <div class="col-6">
+        <div class="form-control border-success border-opacity-25 text-center fs-5">Сообщения отсутствуют</div>
+    </div>
+    {% else %}
     {% for item in object_list %}
     <div class="col-3">
         <div class="card mb-4 box-shadow" style="height: 95%;">
@@ -23,6 +28,7 @@
         </div>
     </div>
     {% endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

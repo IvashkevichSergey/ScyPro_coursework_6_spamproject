@@ -1,0 +1,34 @@
+{% extends 'spam/base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-8">
+        {% if not object_list %}
+        <div class="form-control border-success border-opacity-25 text-center fs-5">Логи отсутствуют</div>
+        {% else %}
+        <div class="form-control border-success border-opacity-25 text-center fs-5">
+            Список логов рассылки "{{ object_list.0.spam.title }}"
+        </div>
+        <table class="table text-center">
+            <tr>
+                <th>Дата лога</th>
+                <th>Статус</th>
+                <th>Адресат</th>
+                <th>Ошибки</th>
+            </tr>
+            {% for item in object_list %}
+            <tr class="align-middle">
+                <td>{{ item.last_send }}</td>
+                <td>{{ item.get_status_display|title }}</td>
+                <td>{{ item.client }}</td>
+                <td>{{ item.errors }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+        <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+           href="{% url 'spam:spam_list' %}">Назад</a>
+    </div>
+</div>
+{% endblock %}

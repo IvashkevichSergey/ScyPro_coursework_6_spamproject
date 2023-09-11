@@ -8,14 +8,24 @@
 </head>
 
 <body>
-
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">Меню</h5>
     <nav class="ms-5">
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:index' %}">Главная</a>
+        {% if not user.is_authenticated %}
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'users:login' %}">Войти</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'users:register' %}">Регистрация</a>
+        {% else %}
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="">Главная</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:spam_list' %}">Рассылки</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:messages' %}">Сообщения</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:clients' %}">Клиенты</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="">Просмотр логов рассылок</a>
+        {%  if user.is_staff %}
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:users_list' %}">Пользователи</a>
+        {% endif %}
+        <a class="p-2 btn btn-sm btn-light" href="{% url 'users:profile' %}">Профиль</a>
+        <a class="p-2 btn btn-sm btn-light" href="{% url 'users:logout' %}">Выйти</a>
+        {% endif %}
     </nav>
 </div>
 
@@ -30,11 +40,7 @@
 
 </div>
 <footer class="pt-1 my-md-5 pt-md-5 border-top">
-    <div class="row">
-        <div class="col-12 col-md">
-            <small class="d-block mb-3 text-muted">&copy; {% now 'Y' %} </small>
-        </div>
-    </div>
+    <small class="d-block mb-3 text-muted">&copy; {% now 'Y' %}</small>
 </footer>
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>

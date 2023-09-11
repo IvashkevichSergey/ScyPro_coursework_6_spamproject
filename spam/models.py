@@ -1,11 +1,14 @@
 from django.db import models
 
+from users.models import User
+
 NULLABLE = {'null': True, 'blank': True}
 
 
 class Client(models.Model):
     full_name = models.CharField(max_length=150, verbose_name='ФИО')
     email = models.EmailField(**NULLABLE, verbose_name='электронная почта')
+    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
 
     def __str__(self):
         return f'{self.full_name} ({self.email})'
@@ -18,6 +21,7 @@ class Client(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=50, verbose_name='тема письма')
     body = models.TextField(verbose_name='тело письма')
+    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
 
     def __str__(self):
         return f'Сообщение на тему "{self.subject}"'
@@ -40,6 +44,7 @@ class Spam(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='статус')
     clients = models.ManyToManyField(Client, verbose_name='адресаты рассылки')
     message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, verbose_name='сообщение к рассылке')
+    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='автор рассылки')
 
     def __str__(self):
         return f'{self.title}, статус "{self.get_status_display()}"'
@@ -58,7 +63,7 @@ class Logs(models.Model):
     last_send = models.DateTimeField(verbose_name='дата и время последней рассылки')
     status = models.CharField(choices=STATUS_CHOICES, verbose_name='статус последней рассылки')
     client = models.CharField(**NULLABLE, max_length=50, verbose_name='клиент')
-    errors = models.CharField(default='Без ошибок', max_length=100, verbose_name='ошибки отправки')
+    errors = models.CharField(max_length=100, verbose_name='ошибки отправки')
 
     def __str__(self):
         return f'Рассылка: {self.spam}\n' \
