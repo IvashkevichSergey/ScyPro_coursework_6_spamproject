@@ -12,7 +12,7 @@ class SpamListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if not self.request.user.is_staff:
+        if not self.request.user.has_perm('spam.view_spam'):
             queryset = queryset.filter(owner=self.request.user)
         queryset = queryset.order_by('-pk')
         return queryset
@@ -22,7 +22,7 @@ class SpamDetailView(UserPassesTestMixin, DetailView):
     model = Spam
 
     def test_func(self):
-        return self.get_object().owner == self.request.user or self.request.user.is_staff
+        return self.get_object().owner == self.request.user or self.request.user.has_perm('spam.view_spam')
 
 
 def toggle_spam_status(request, pk):
@@ -81,7 +81,7 @@ class MessageListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if not self.request.user.is_staff:
+        if not self.request.user.has_perm('spam.view_message'):
             queryset = queryset.filter(owner=self.request.user)
         queryset = queryset.order_by('-pk')
         return queryset
@@ -91,7 +91,7 @@ class MessageDetailView(UserPassesTestMixin, DetailView):
     model = Message
 
     def test_func(self):
-        return self.get_object().owner == self.request.user or self.request.user.is_staff
+        return self.get_object().owner == self.request.user or self.request.user.has_perm('spam.view_message')
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -129,7 +129,7 @@ class ClientListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if not self.request.user.is_staff:
+        if not self.request.user.has_perm('spam.view_client'):
             queryset = queryset.filter(owner=self.request.user)
         return queryset
 
@@ -138,7 +138,7 @@ class ClientDetailView(UserPassesTestMixin, DetailView):
     model = Client
 
     def test_func(self):
-        return self.get_object().owner == self.request.user or self.request.user.is_staff
+        return self.get_object().owner == self.request.user or self.request.user.has_perm('spam.view_client')
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):

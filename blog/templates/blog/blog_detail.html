@@ -1,0 +1,37 @@
+{% extends 'spam/base.html' %}
+{% block content %}
+{% load tags %}
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="text-body-secondary p-2"><em>{{ object.publish_date }}</em></div>
+
+        <div class="card box-shadow">
+
+            <div class="card-header text-center pb-1">
+                <h4 class="font-weight-normal">{{ object.title }}</h4>
+            </div>
+
+
+            <div class="card-body text-center">
+                <div class="mb-3 font-weight-normal">
+                    <h6 class="text-muted">{{ object.body }}</h6>
+                </div>
+                <div class="mb-3 font-weight-normal">
+                    <img src="{% process_media article.image %}" width="350" height="500"/>
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col"><a href="{% url 'blog:index' %}"
+                                        class="btn btn-outline-secondary">
+                        Назад</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

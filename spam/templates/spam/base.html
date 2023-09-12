@@ -15,12 +15,11 @@
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'users:login' %}">Войти</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'users:register' %}">Регистрация</a>
         {% else %}
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="">Главная</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'blog:index' %}">Главная</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:spam_list' %}">Рассылки</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:messages' %}">Сообщения</a>
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:clients' %}">Клиенты</a>
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="">Просмотр логов рассылок</a>
-        {%  if user.is_staff %}
+        {%  if perms.users.view_user %}
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:users_list' %}">Пользователи</a>
         {% endif %}
         <a class="p-2 btn btn-sm btn-light" href="{% url 'users:profile' %}">Профиль</a>
