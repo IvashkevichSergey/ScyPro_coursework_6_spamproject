@@ -5,7 +5,7 @@ from users.forms import StyleFormMixin
 
 
 class SpamForm(StyleFormMixin, forms.ModelForm):
-    """Форма для создания рассылки"""
+    """Форма для создания новой либо обновления существующей рассылки"""
     class Meta:
         model = Spam
         fields = ('title', 'spam_time', 'periodicity', 'clients', 'message')

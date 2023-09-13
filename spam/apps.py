@@ -6,5 +6,6 @@ class SpamConfig(AppConfig):
     name = 'spam'
 
     def ready(self):
-        from spam import task_schedular
-        task_schedular.task_schedular()
+        """Функция, отвечающая за запуск кронтаба при запуске программы"""
+        from spam import services
+        services.task_schedular()

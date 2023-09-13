@@ -6,6 +6,7 @@ NULLABLE = {'null': True, 'blank': True}
 
 
 class Client(models.Model):
+    """Класс для создания модели Клиентов"""
     full_name = models.CharField(max_length=150, verbose_name='ФИО')
     email = models.EmailField(**NULLABLE, verbose_name='электронная почта')
     owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
@@ -19,6 +20,7 @@ class Client(models.Model):
 
 
 class Message(models.Model):
+    """Класс для создания модели Сообщений"""
     subject = models.CharField(max_length=50, verbose_name='тема письма')
     body = models.TextField(verbose_name='тело письма')
     owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
@@ -32,6 +34,7 @@ class Message(models.Model):
 
 
 class Spam(models.Model):
+    """Класс для создания модели Рассылок"""
     STATUS_CHOICES = [
         ('created', 'создана'),
         ('started', 'запущена'),
@@ -55,6 +58,7 @@ class Spam(models.Model):
 
 
 class Logs(models.Model):
+    """Класс для создания модели Логов"""
     STATUS_CHOICES = [
         ('ок', 'успешно'),
         ('failed', 'ошибка'),

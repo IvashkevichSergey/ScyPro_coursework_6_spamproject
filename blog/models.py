@@ -5,6 +5,7 @@ from users.models import NULLABLE
 
 
 class Blog(models.Model):
+    """Класс для создания модели Блога"""
     title = models.CharField(max_length=100, verbose_name='заголовок')
     body = models.TextField(verbose_name='содержимое')
     image = models.ImageField(upload_to='media/', verbose_name='содержимое', **NULLABLE)

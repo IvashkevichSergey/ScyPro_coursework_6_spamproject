@@ -96,5 +96,5 @@ def send_spam(email_params: Spam, client: Client):
 def task_schedular():
     """Запускает крон для периодической проверки активных рассылок"""
     scheduler = BackgroundScheduler()
-    # scheduler.add_job(send_emails, trigger=CronTrigger(second='*/5'))
-    # scheduler.start()
+    scheduler.add_job(send_emails, trigger=CronTrigger(minute='*/5'))
+    scheduler.start()
