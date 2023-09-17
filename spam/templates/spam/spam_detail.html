@@ -21,7 +21,7 @@
                 <div class="mb-3 font-weight-normal">
                     <h6>Текущий статус:</h6>
                     <h6 class="text-muted">Рассылка {{ object.get_status_display }}</h6>
-                    {% if object.status == 'created' and object.owner == user %}
+                    {% if object.status == 'created' and object.created_by == user %}
                     <span class="badge text-bg-success">
                         <a class="link-light link-underline-opacity-0 link-underline-opacity-75-hover"
                            href="{% url 'spam:toggle_status' object.pk %}">Запустить рассылку</a>
@@ -38,25 +38,25 @@
                     <h6>Получатели рассылки:</h6>
                     {% for client in object.clients.all %}
                     <a class="list-group-item h6 text-muted link-underline link-underline-opacity-0"
-                           href="{% url 'spam:client_detail' client.pk %}">{{ client }}</a>
+                           href="{% url 'client:detail' client.pk %}">{{ client }}</a>
                     {% endfor %}
                     <hr>
                     <div class="mb-3 font-weight-normal">
                         <h6>Сообщение к отправке:</h6>
                         <a class="h6 text-muted link-underline link-underline-opacity-0"
-                           href="{% url 'spam:message_detail' object.message.pk %}">{{ object.message }}</a>
+                           href="{% url 'message:detail' object.message.pk %}">{{ object.message }}</a>
                     </div>
                 </div>
             </div>
-            {% if object.owner == user %}
+            {% if object.created_by == user %}
             <div class="card-footer">
                 <div class="row">
-                    <div class="col"><a href="{% url 'spam:change_spam' object.pk %}"
+                    <div class="col"><a href="{% url 'spam:update' object.pk %}"
                                         class="btn btn-outline-secondary">
                         Изменить рассылку</a>
                     </div>
                     <div class="col-4"></div>
-                    <div class="col"><a href="{% url 'spam:delete_spam' object.pk %}"
+                    <div class="col"><a href="{% url 'spam:delete' object.pk %}"
                                         class="btn btn-outline-danger">
                         Удалить рассылку</a>
                     </div>

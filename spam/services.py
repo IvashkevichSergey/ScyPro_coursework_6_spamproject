@@ -6,7 +6,8 @@ import smtplib
 from django.core.mail import send_mail
 
 from config import settings
-from spam.models import Spam, Logs, Client
+from spam.models import Spam, Logs
+from spam_clients.models import Client
 
 
 def send_emails():

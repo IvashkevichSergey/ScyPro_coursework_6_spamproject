@@ -1,6 +1,7 @@
 from django import forms
 
-from spam.models import Spam, Client, Message
+from spam.models import Spam, Message
+from spam_clients.models import Client
 from users.forms import StyleFormMixin
 
 
@@ -15,8 +16,8 @@ class SpamForm(StyleFormMixin, forms.ModelForm):
         клиентов и сообщения, которые создавали другие пользователи"""
         self.current_user = kwargs.pop('user', None)
         super(SpamForm, self).__init__(*args, **kwargs)
-        self.fields['clients'].queryset = Client.objects.filter(owner=self.current_user)
-        self.fields['message'].queryset = Message.objects.filter(owner=self.current_user)
+        self.fields['clients'].queryset = Client.objects.filter(created_by=self.current_user)
+        self.fields['message'].queryset = Message.objects.filter(created_by=self.current_user)
 
 
 

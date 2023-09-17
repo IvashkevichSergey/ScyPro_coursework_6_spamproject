@@ -28,7 +28,6 @@ class RegisterView(CreateView):
                     message=f'Для подтверждения электронной почты введите на сайте следующий код:\n{verification_code}',
                     recipient_list=[self.object.email],
                     from_email=settings.EMAIL_HOST_USER,
-                    fail_silently=False
                 )
             print('EMAIL SENT')
         return super().form_valid(form)
@@ -45,6 +44,8 @@ class ProfileView(UpdateView):
 
 
 def verify_email(request, pk):
+    if request.method == 'GET':
+        messages.success(request=request, message='Введите проверочный код, высланный на Вашу электронную почту')
     if request.method == 'POST':
         check_code = request.POST['check_code']
         user = User.objects.get(pk=pk)
@@ -54,10 +55,8 @@ def verify_email(request, pk):
             user.save()
             return redirect('users:login')
         else:
-            context = {
-                'error': 'Код некорректный'
-            }
-            return render(request, 'users/verify_email.html', context)
+            messages.error(request=request, message='Введён некорректный код')
+            return render(request, 'users/verify_email.html')
     return render(request, 'users/verify_email.html')
 
 

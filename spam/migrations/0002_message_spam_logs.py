@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('spam_time', models.TimeField(verbose_name='время рассылки')),
                 ('periodicity', models.SmallIntegerField(default=7, verbose_name='периодичность рассылки (дней)')),
                 ('status', models.CharField(default='создана', max_length=25, verbose_name='статус')),
-                ('clients', models.ManyToManyField(to='spam.client', verbose_name='кому отправить')),
+                ('spam_clients', models.ManyToManyField(to='spam.client', verbose_name='кому отправить')),
                 ('messages', models.ManyToManyField(to='spam.message', verbose_name='сообщения к рассылке')),
             ],
             options={

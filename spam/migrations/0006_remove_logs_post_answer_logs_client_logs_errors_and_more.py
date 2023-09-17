@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='spam',
-            name='clients',
+            name='spam_clients',
             field=models.ManyToManyField(to='spam.client', verbose_name='адресаты рассылки'),
         ),
         migrations.AlterField(

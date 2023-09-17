@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+from django.contrib import messages
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'users',
     'django_apscheduler',
     'blog',
+    'spam_clients',
+    'spam_messages',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +79,11 @@ TEMPLATES = [
         },
     },
 ]
+
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'alert alert-success',
+    messages.ERROR: 'alert alert-danger',
+}
 
 WSGI_APPLICATION = 'config.wsgi.application'
 

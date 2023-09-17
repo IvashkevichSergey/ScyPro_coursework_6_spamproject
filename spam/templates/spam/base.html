@@ -16,9 +16,9 @@
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'users:register' %}">Регистрация</a>
         {% else %}
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'blog:index' %}">Главная</a>
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:spam_list' %}">Рассылки</a>
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:messages' %}">Сообщения</a>
-        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:clients' %}">Клиенты</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:list' %}">Рассылки</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'message:list' %}">Сообщения</a>
+        <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'client:list' %}">Клиенты</a>
         {%  if perms.users.view_user %}
         <a class="p-2 btn btn-sm btn-outline-secondary" href="{% url 'spam:users_list' %}">Пользователи</a>
         {% endif %}
@@ -37,8 +37,8 @@
     {% endblock %}
 
 </div>
-<footer class="pt-1 my-md-5 pt-md-5 border-top">
-    <small class="d-block mb-3 text-muted">&copy; {% now 'Y' %}</small>
+<footer class="my-md-5 border-top">
+    <small class="p-4 d-block mb-3 text-muted">&copy; {% now 'Y' %}</small>
 </footer>
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>

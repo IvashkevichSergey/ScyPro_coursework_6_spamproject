@@ -1,7 +1,7 @@
 {% extends 'spam/base.html' %}
 
 {% block content %}
-<a href="{% url 'spam:create_spam' %}" class="btn btn-outline-secondary mb-3">
+<a href="{% url 'spam:create' %}" class="btn btn-outline-secondary mb-3">
     Создать новую рассылку
 </a>
 <div class="row">
@@ -27,7 +27,7 @@
                     <td>{{ item.periodicity }}</td>
                     <td>{{ item.get_status_display|title }}</td>
                     <td>
-                        <a type="button" href="{% url 'spam:spam_detail' item.pk %}"
+                        <a type="button" href="{% url 'spam:detail' item.pk %}"
                            class="btn btn-outline-dark btn-sm">
                             Подробнее
                         </a>

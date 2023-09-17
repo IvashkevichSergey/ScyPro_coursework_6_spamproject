@@ -1,7 +1,7 @@
 {% extends 'spam/base.html' %}
 
 {% block content %}
-<a href="{% url 'spam:create_client' %}" class="btn btn-outline-secondary mb-3">
+<a href="{% url 'client:create' %}" class="btn btn-outline-secondary mb-3">
     Добавить нового клиента сервиса
 </a>
 <div class="row">
@@ -21,7 +21,7 @@
                 <td>{{ client.full_name }}</td>
                 <td>{{ client.email }}</td>
                 <td>
-                    <a type="button" href="{% url 'spam:client_detail' client.pk %}"
+                    <a type="button" href="{% url 'client:detail' client.pk %}"
                        class="btn btn-outline-dark btn-sm">
                         Подробнее
                     </a>

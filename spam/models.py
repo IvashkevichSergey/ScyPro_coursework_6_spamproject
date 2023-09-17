@@ -1,36 +1,10 @@
 from django.db import models
 
+from spam_clients.models import Client
+from spam_messages.models import Message
 from users.models import User
 
 NULLABLE = {'null': True, 'blank': True}
-
-
-class Client(models.Model):
-    """Класс для создания модели Клиентов"""
-    full_name = models.CharField(max_length=150, verbose_name='ФИО')
-    email = models.EmailField(**NULLABLE, verbose_name='электронная почта')
-    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
-
-    def __str__(self):
-        return f'{self.full_name} ({self.email})'
-
-    class Meta:
-        verbose_name = 'клиент'
-        verbose_name_plural = 'клиенты'
-
-
-class Message(models.Model):
-    """Класс для создания модели Сообщений"""
-    subject = models.CharField(max_length=50, verbose_name='тема письма')
-    body = models.TextField(verbose_name='тело письма')
-    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='владелец клиента')
-
-    def __str__(self):
-        return f'Сообщение на тему "{self.subject}"'
-
-    class Meta:
-        verbose_name = 'сообщение'
-        verbose_name_plural = 'сообщения'
 
 
 class Spam(models.Model):
@@ -47,10 +21,18 @@ class Spam(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='статус')
     clients = models.ManyToManyField(Client, verbose_name='адресаты рассылки')
     message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, verbose_name='сообщение к рассылке')
-    owner = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='автор рассылки')
+    created_by = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='автор рассылки')
 
     def __str__(self):
         return f'{self.title}, статус "{self.get_status_display()}"'
+
+    @property
+    def next_status(self):
+        """Метод для смены статуса рассылки"""
+        return {
+            'created': 'started',
+            'started': 'completed'
+        }
 
     class Meta:
         verbose_name = 'рассылка'

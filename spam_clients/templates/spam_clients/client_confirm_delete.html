@@ -3,7 +3,7 @@
 <div class="col-lg-6">
     <div class="card mb-4 box-shadow text-center">
         <div class="card-header">
-            <span>Вы действительно хотите удалить сообщение "{{ object.subject }}"?</span>
+            <span>Вы действительно хотите удалить клиента "{{ object.full_name }}"?</span>
         </div>
         <div class="card-body">
             <form method="post" class="form-floating">
@@ -13,8 +13,8 @@
                         Подтвердить удаление
                     </button>
                     <br>
-                    <a href="{% url 'spam:message_detail' object.pk %}" class="btn btn-lg btn-block btn-warning">
-                        Вернуться к сообщению
+                    <a href="{% url 'client:detail' object.pk %}" class="btn btn-lg btn-block btn-warning">
+                        Отмена
                     </a>
                 </div>
             </form>

@@ -10,9 +10,11 @@
                 {% csrf_token %}
                 <input type="text" name="check_code" placeholder="Введите код" required>
                 <button type="submit" class="btn btn-lg btn-block btn-success">Подтвердить</button>
-                {% if error %}
-                <div class="alert alert-danger mt-2">{{ error }}</div>
-                {% endif %}
+                {% for message in messages %}
+                <div class="{{ message.tags }} mt-2">
+                    {{ message }}
+                </div>
+                {% endfor %}
             </form>
         </div>
     </div>

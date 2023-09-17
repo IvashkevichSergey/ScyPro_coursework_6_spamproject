@@ -1,12 +1,12 @@
 import random
 from typing import Optional
 
-from django.db.models import QuerySet
 from django.views.generic import ListView, DetailView
 
 from blog.models import Blog
 from blog.services import cache_blog
-from spam.models import Spam, Client
+from spam.models import Spam
+from spam_clients.models import Client
 
 
 class BlogListView(ListView):
@@ -21,7 +21,7 @@ class BlogListView(ListView):
         # Добавляем к контексту список активных рассылок
         context_data['spam_active'] = Spam.objects.filter(status='started')
         # Добавляем к контексту список всех уникальных клиентов
-        context_data['clients'] = Client.objects.distinct()
+        context_data['spam_clients'] = Client.objects.distinct()
         return context_data
 
     def get_queryset(self) -> list[Blog]:
