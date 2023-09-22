@@ -1,7 +1,5 @@
 from django import template
 
-from config.settings import BASE_DIR
-
 register = template.Library()
 
 

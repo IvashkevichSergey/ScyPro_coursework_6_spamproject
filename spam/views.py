@@ -1,9 +1,11 @@
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, \
+    LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, \
+    UpdateView, DeleteView
 
 from spam.forms import SpamForm
 from spam.models import Spam, Logs
@@ -15,8 +17,9 @@ class SpamListView(LoginRequiredMixin, ListView):
     model = Spam
 
     def get_queryset(self) -> QuerySet[Spam]:
-        """Передаём в шаблон либо все рассылки, если пользователь имеет права Менеджера, либо
-        только рассылки, созданные текущим пользователем"""
+        """Передаём в шаблон либо все рассылки, если пользователь
+        имеет права Менеджера, либо только рассылки, созданные
+        текущим пользователем"""
         queryset = super().get_queryset()
         if not self.request.user.has_perm('spam.view_spam'):
             queryset = queryset.filter(created_by=self.request.user)
@@ -30,8 +33,11 @@ class SpamDetailView(UserPassesTestMixin, DetailView):
     model = Spam
 
     def test_func(self) -> bool:
-        """Доступ к рассылке имеет либо её автор, либо модератор с соответствующими правами"""
-        return self.get_object().created_by == self.request.user or self.request.user.has_perm('spam.view_spam')
+        """Доступ к рассылке имеет либо её автор, либо модератор
+        с соответствующими правами"""
+        return \
+            self.get_object().created_by == self.request.user \
+            or self.request.user.has_perm('spam.view_spam')
 
 
 def toggle_spam_status(request: HttpRequest, pk: int) -> HttpResponseRedirect:
@@ -55,14 +61,16 @@ class SpamCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('spam:list')
 
     def get_form_kwargs(self) -> dict[str, User]:
-        """Добавляем к аргументам, передаваемым в форму объект текущего пользователя
-        для кастомной настройки отображения полей формы"""
+        """Добавляем к аргументам, передаваемым в форму объект
+        текущего пользователя для кастомной настройки отображения
+        полей формы"""
         kwargs = super(SpamCreateView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form: SpamForm) -> HttpResponseRedirect:
-        """Если форма валидна - заполняем у модели рассылки владельца текущим пользователем"""
+        """Если форма валидна - заполняем у модели рассылки
+        владельца текущим пользователем"""
         self.object = form.save()
         if form.is_valid():
             spam = form.save()
@@ -78,8 +86,9 @@ class SpamUpdateView(UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('spam:list')
 
     def get_form_kwargs(self) -> dict[str, User]:
-        """Добавляем к аргументам, передаваемым в форму объект текущего пользователя
-        для кастомной настройки отображения полей формы"""
+        """Добавляем к аргументам, передаваемым в форму объект
+        текущего пользователя для кастомной настройки отображения
+        полей формы"""
         kwargs = super(SpamUpdateView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
@@ -105,7 +114,8 @@ class LogsListView(PermissionRequiredMixin, ListView):
     permission_required = 'spam.view_logs'
 
     def get_queryset(self) -> QuerySet[Logs]:
-        """Получаем логи по конкретной рассылке, добавляем сортировку по дате создания лога"""
+        """Получаем логи по конкретной рассылке,
+        добавляем сортировку по дате создания лога"""
         queryset = super().get_queryset()
         queryset = queryset.filter(spam=self.kwargs.get('pk'))
         queryset = queryset.order_by('-last_send')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from spam.models import Client, Message, Spam, Logs
+from spam.models import Spam, Logs
 
 
 @admin.register(Spam)
@@ -11,5 +11,3 @@ class SpamAdmin(admin.ModelAdmin):
 @admin.register(Logs)
 class LogsAdmin(admin.ModelAdmin):
     list_display = ('spam', 'client', 'last_send', 'status')
-
-

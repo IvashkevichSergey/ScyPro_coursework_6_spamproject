@@ -8,7 +8,10 @@ class Client(models.Model):
     """Класс для создания модели Клиентов"""
     full_name = models.CharField(max_length=150, verbose_name='имя клиента')
     email = models.EmailField(verbose_name='электронная почта', unique=True)
-    created_by = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='создатель клиента')
+    created_by = models.ForeignKey(
+        User, **NULLABLE, on_delete=models.CASCADE,
+        verbose_name='создатель клиента'
+    )
 
     def __str__(self):
         return f'{self.full_name} ({self.email})'

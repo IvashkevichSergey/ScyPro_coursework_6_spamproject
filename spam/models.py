@@ -15,13 +15,27 @@ class Spam(models.Model):
         ('completed', 'завершена')
     ]
 
-    title = models.CharField(default=f'Рассылка ', max_length=50, verbose_name='Название')
+    title = models.CharField(
+        default='Рассылка ', max_length=50,
+        verbose_name='Название'
+    )
     spam_time = models.TimeField(verbose_name='время рассылки')
-    periodicity = models.SmallIntegerField(default=1, verbose_name='периодичность рассылки (дней)')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='статус')
+    periodicity = models.SmallIntegerField(
+        default=1, verbose_name='периодичность рассылки (дней)'
+    )
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES,
+        default='created', verbose_name='статус'
+    )
     clients = models.ManyToManyField(Client, verbose_name='адресаты рассылки')
-    message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, verbose_name='сообщение к рассылке')
-    created_by = models.ForeignKey(User, **NULLABLE, on_delete=models.CASCADE, verbose_name='автор рассылки')
+    message = models.ForeignKey(
+        Message, default=None, on_delete=models.CASCADE,
+        verbose_name='сообщение к рассылке'
+    )
+    created_by = models.ForeignKey(
+        User, **NULLABLE, on_delete=models.CASCADE,
+        verbose_name='автор рассылки'
+    )
 
     def __str__(self):
         return f'{self.title}, статус "{self.get_status_display()}"'
@@ -45,9 +59,15 @@ class Logs(models.Model):
         ('ок', 'успешно'),
         ('failed', 'ошибка'),
     ]
-    spam = models.ForeignKey(Spam, **NULLABLE, on_delete=models.SET_NULL, verbose_name='Рассылка')
-    last_send = models.DateTimeField(verbose_name='дата и время последней рассылки')
-    status = models.CharField(choices=STATUS_CHOICES, verbose_name='статус последней рассылки')
+    spam = models.ForeignKey(
+        Spam, **NULLABLE, on_delete=models.SET_NULL, verbose_name='Рассылка'
+    )
+    last_send = models.DateTimeField(
+        verbose_name='дата и время последней рассылки'
+    )
+    status = models.CharField(
+        choices=STATUS_CHOICES, verbose_name='статус последней рассылки'
+    )
     client = models.CharField(**NULLABLE, max_length=50, verbose_name='клиент')
     errors = models.CharField(max_length=100, verbose_name='ошибки отправки')
 

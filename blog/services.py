@@ -6,7 +6,8 @@ from config import settings
 
 
 def cache_blog() -> QuerySet[Blog]:
-    """Сервисная функция для кеширования получаемых данных из БД по модели Блог"""
+    """Сервисная функция для кеширования получаемых данных
+    из БД по модели Блог"""
     if settings.ALLOW_CACHE:
         key = 'blog'
         articles = cache.get(key)

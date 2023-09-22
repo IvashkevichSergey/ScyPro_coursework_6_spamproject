@@ -160,8 +160,8 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
 
-# Настройки для подключения брокера redis для кеширования отдельных страниц сайта
-ALLOW_CACHE = False
+# Настройки для подключения брокера redis для кеширования отдельных страниц
+ALLOW_CACHE = True
 if ALLOW_CACHE:
     CACHES = {
         "default": {

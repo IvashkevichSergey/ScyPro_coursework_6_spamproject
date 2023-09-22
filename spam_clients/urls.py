@@ -1,7 +1,8 @@
 from django.urls import path
 
 from spam_clients.apps import ClientsConfig
-from spam_clients.views import ClientListView, ClientCreateView, ClientDetailView, ClientUpdateView, ClientDeleteView
+from spam_clients.views import ClientListView, ClientCreateView, \
+    ClientDetailView, ClientUpdateView, ClientDeleteView
 
 app_name = ClientsConfig.name
 

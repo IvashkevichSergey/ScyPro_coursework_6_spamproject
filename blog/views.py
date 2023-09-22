@@ -25,10 +25,10 @@ class BlogListView(ListView):
         return context_data
 
     def get_queryset(self) -> list[Blog]:
-        """Выбираем 3 рандомные статьи из модели Blog"""
-        queryset = super().get_queryset()
-        # queryset = cache_blog()
-        queryset = random.sample(list(queryset), 3)
+        """Выбираем рандомные статьи (не более 3-х) из модели Blog"""
+        # queryset = super().get_queryset()
+        queryset = cache_blog()
+        queryset = random.sample(list(queryset), min(len(queryset), 3))
         return queryset
 
 

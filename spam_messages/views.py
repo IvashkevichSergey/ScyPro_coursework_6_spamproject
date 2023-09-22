@@ -3,7 +3,8 @@ from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, \
+    CreateView, UpdateView, DeleteView
 
 from spam_messages.models import Message
 
@@ -13,8 +14,9 @@ class MessageListView(LoginRequiredMixin, ListView):
     model = Message
 
     def get_queryset(self) -> QuerySet[Message]:
-        """Передаём в шаблон либо все сообщения, если пользователь имеет права Менеджера, либо
-        только сообщения, созданные текущим пользователем"""
+        """Передаём в шаблон либо все сообщения, если пользователь
+        имеет права Менеджера, либо только сообщения, созданные
+        текущим пользователем"""
         queryset = super().get_queryset()
         if not self.request.user.has_perm('spam_messages.view_message'):
             queryset = queryset.filter(created_by=self.request.user)
@@ -27,10 +29,12 @@ class MessageDetailView(UserPassesTestMixin, DetailView):
     model = Message
 
     def test_func(self) -> bool:
-        """Доступ к детальной информации по сообщениям имеет либо автор сообщения,
-        либо модератор с соответствующими правами"""
-        return self.get_object().created_by == self.request.user \
-               or self.request.user.has_perm('spam_messages.view_message')
+        """Доступ к детальной информации по сообщениям
+        имеет либо автор сообщения, либо модератор
+        с соответствующими правами"""
+        return \
+            self.get_object().created_by == self.request.user \
+            or self.request.user.has_perm('spam_messages.view_message')
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -40,7 +44,8 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('message:list')
 
     def form_valid(self, form: ModelForm) -> HttpResponseRedirect:
-        """Если форма валидна - заполняем поле автора сообщения текущим пользователем"""
+        """Если форма валидна - заполняем поле автора
+        сообщения текущим пользователем"""
         if form.is_valid():
             message = form.save()
             message.created_by = self.request.user
